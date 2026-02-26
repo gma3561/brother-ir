@@ -7,6 +7,20 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
 
+  /* 모바일 세로 모드 → 강제 가로 회전 */
+  @media screen and (max-width: 1024px) and (orientation: portrait) {
+    html {
+      transform: rotate(90deg);
+      transform-origin: top left;
+      width: 100vh;
+      height: 100vw;
+      overflow-x: hidden;
+      position: absolute;
+      top: 0;
+      left: 100%;
+    }
+  }
+
   :root {
     --bg-primary: #ffffff;
     --bg-slide: #ffffff;
