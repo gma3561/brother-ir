@@ -7,17 +7,26 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap');
 
-  /* 모바일 세로 모드 → 강제 가로 회전 */
+  /* 모바일 세로 모드 → 강제 가로 회전 + 스크롤 유지 */
   @media screen and (max-width: 1024px) and (orientation: portrait) {
-    html {
-      transform: rotate(90deg);
-      transform-origin: top left;
+    body {
+      margin: 0;
+      padding: 0;
       width: 100vh;
       height: 100vw;
-      overflow-x: hidden;
+      overflow: hidden;
+    }
+    #landscape-wrapper {
+      transform: rotate(90deg);
+      transform-origin: top left;
       position: absolute;
       top: 0;
-      left: 100%;
+      left: 100vw;
+      width: 100vh;
+      height: 100vw;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
     }
   }
 
@@ -1648,5 +1657,39 @@
   </div>
 </section>
 
+<script>
+(function() {
+  function isMobilePortrait() {
+    return window.innerWidth <= 1024 && window.innerHeight > window.innerWidth;
+  }
+  function wrapContent() {
+    if (document.getElementById('landscape-wrapper')) return;
+    var wrapper = document.createElement('div');
+    wrapper.id = 'landscape-wrapper';
+    while (document.body.firstChild) {
+      wrapper.appendChild(document.body.firstChild);
+    }
+    document.body.appendChild(wrapper);
+  }
+  function unwrapContent() {
+    var wrapper = document.getElementById('landscape-wrapper');
+    if (!wrapper) return;
+    while (wrapper.firstChild) {
+      document.body.appendChild(wrapper.firstChild);
+    }
+    wrapper.remove();
+  }
+  function handleOrientation() {
+    if (isMobilePortrait()) {
+      wrapContent();
+    } else {
+      unwrapContent();
+    }
+  }
+  handleOrientation();
+  window.addEventListener('resize', handleOrientation);
+  window.addEventListener('orientationchange', handleOrientation);
+})();
+</script>
 </body>
 </html>
